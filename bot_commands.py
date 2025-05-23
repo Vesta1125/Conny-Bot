@@ -58,12 +58,12 @@ def setup(bot, record, save_record):
 
     @bot.command(name="티어설정")
     async def set_tier(ctx, *args):
-        allowed_tiers = ["1티어", "2티어", "3티어", "4티어", "5티어"]
+        allowed_tiers = ["1티어", "2티어", "3티어", "4티어", "5티어", "버러지티어"]
 
         if len(args) == 1:
             tier = args[0]
             if tier not in allowed_tiers:
-                await ctx.send("올바른 티어를 입력해주세요. (1티어 ~ 5티어)")
+                await ctx.send("올바른 티어를 입력해주세요. (1티어 ~ 5티어, 버러지티어)")
                 return
 
             user = str(ctx.author.id)
@@ -73,22 +73,17 @@ def setup(bot, record, save_record):
             await ctx.send(f"{ctx.author.name}님의 티어가 '{tier}'로 설정되었습니다.")
 
         elif len(args) == 2:
-            if not ctx.author.guild_permissions.administrator:
-                await ctx.send("다른 유저의 티어를 설정하려면 관리자 권한이 필요합니다.")
-                return
-
-            member_mention = args[0]
-            tier = args[1]
-
-            if tier not in allowed_tiers:
-                await ctx.send("올바른 티어를 입력해주세요. (1티어 ~ 5티어)")
-                return
-
-            if len(ctx.message.mentions) != 1:
+            if not ctx.message.mentions:
                 await ctx.send("멘션한 유저를 정확히 1명만 지정해주세요.")
                 return
 
             member = ctx.message.mentions[0]
+            tier = args[1]
+
+            if tier not in allowed_tiers:
+                await ctx.send("올바른 티어를 입력해주세요. (1티어 ~ 5티어, 버러지티어)")
+                return
+
             user = str(member.id)
             ensure_user(user)
             record[user]["티어"] = tier
