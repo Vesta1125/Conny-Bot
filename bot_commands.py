@@ -176,3 +176,4 @@ def setup(bot, record, save_record):
         ), inline=False)
 
         await ctx.send(embed=embed)
+
