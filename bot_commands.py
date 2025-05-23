@@ -57,48 +57,46 @@ def setup(bot, record, save_record):
         await ctx.send(f"{member.name}님의 전적이 수정되었습니다. (승: {record[user]['승']}, 패: {record[user]['패']})")
 
     @bot.command(name="티어설정")
-async def set_tier(ctx, *args):
-    allowed_tiers = ["1티어", "2티어", "3티어", "4티어", "5티어"]
+    async def set_tier(ctx, *args):
+        allowed_tiers = ["1티어", "2티어", "3티어", "4티어", "5티어"]
 
-    if len(args) == 1:
-        # 자기 자신 티어 설정
-        tier = args[0]
-        if tier not in allowed_tiers:
-            await ctx.send("올바른 티어를 입력해주세요. (1티어 ~ 5티어)")
-            return
+        if len(args) == 1:
+            tier = args[0]
+            if tier not in allowed_tiers:
+                await ctx.send("올바른 티어를 입력해주세요. (1티어 ~ 5티어)")
+                return
 
-        user = str(ctx.author.id)
-        ensure_user(user)
-        record[user]["티어"] = tier
-        save_record(record)
-        await ctx.send(f"{ctx.author.name}님의 티어가 '{tier}'로 설정되었습니다.")
+            user = str(ctx.author.id)
+            ensure_user(user)
+            record[user]["티어"] = tier
+            save_record(record)
+            await ctx.send(f"{ctx.author.name}님의 티어가 '{tier}'로 설정되었습니다.")
 
-    elif len(args) == 2:
-        # 다른 사람 티어 설정 (관리자 권한 필요)
-        if not ctx.author.guild_permissions.administrator:
-            await ctx.send("다른 유저의 티어를 설정하려면 관리자 권한이 필요합니다.")
-            return
+        elif len(args) == 2:
+            if not ctx.author.guild_permissions.administrator:
+                await ctx.send("다른 유저의 티어를 설정하려면 관리자 권한이 필요합니다.")
+                return
 
-        member_mention = args[0]
-        tier = args[1]
+            member_mention = args[0]
+            tier = args[1]
 
-        if tier not in allowed_tiers:
-            await ctx.send("올바른 티어를 입력해주세요. (1티어 ~ 5티어)")
-            return
+            if tier not in allowed_tiers:
+                await ctx.send("올바른 티어를 입력해주세요. (1티어 ~ 5티어)")
+                return
 
-        if len(ctx.message.mentions) != 1:
-            await ctx.send("멘션한 유저를 정확히 1명만 지정해주세요.")
-            return
+            if len(ctx.message.mentions) != 1:
+                await ctx.send("멘션한 유저를 정확히 1명만 지정해주세요.")
+                return
 
-        member = ctx.message.mentions[0]
-        user = str(member.id)
-        ensure_user(user)
-        record[user]["티어"] = tier
-        save_record(record)
-        await ctx.send(f"{member.name}님의 티어가 '{tier}'로 설정되었습니다.")
+            member = ctx.message.mentions[0]
+            user = str(member.id)
+            ensure_user(user)
+            record[user]["티어"] = tier
+            save_record(record)
+            await ctx.send(f"{member.name}님의 티어가 '{tier}'로 설정되었습니다.")
 
-    else:
-        await ctx.send("사용법: `!티어설정 1티어` 또는 `!티어설정 @유저 1티어`")
+        else:
+            await ctx.send("사용법: `!티어설정 1티어` 또는 `!티어설정 @유저 1티어`")
 
     @bot.command(name="등수설정")
     @commands.has_permissions(administrator=True)
@@ -176,7 +174,7 @@ async def set_tier(ctx, *args):
             "`!승패추가 승/패 (숫자)` : 내 전적 추가\n"
             "`!전적조회` : 내 전적 확인\n"
             "`!전적수정 @유저 승/패 숫자` : 관리자용 전적 수정\n"
-            "`!티어설정 [@유저] 티어` : 본인 또는 관리자용 티어 설정\n"
+            "`!티어설정 1티어` 또는 `!티어설정 @유저 1티어` : 티어 설정\n"
             "`!등수설정 @유저 숫자` : 관리자용 등수 설정\n"
             "`!전적초기화` : 관리자용 전체 전적 초기화\n"
             "`!전체전적조회` : 전체 전적 보기"
